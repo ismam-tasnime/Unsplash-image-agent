@@ -85,14 +85,11 @@ A screenshot of a live response is saved at `images/output image response save.p
 3. **Activate the workflow.** Toggle it active so the production webhook URL is live (n8n also exposes a `/webhook-test/...` URL for use while the workflow editor is open, which is what's shown in the example above).
 4. **Call the webhook** with a `q` query parameter set to whatever you want to search for, e.g. `?q=mountains`, `?q=coffee`, `?q=cats`.
 
-> **Security note:** The current `unsplash image agent.json` export has a real Unsplash Access Key hard-coded in the HTTP Request node's Authorization header. Don't commit API keys to version control — configure them through n8n's credential store or environment variables instead, and rotate any key that has already been exposed.
-
 ## Limitations
 
 - **Fixed result count.** `per_page` is hard-coded to `3`; it isn't yet exposed as a query parameter on the webhook.
 - **No input validation.** A missing or empty `q` parameter is passed straight to Unsplash as-is, so error handling depends entirely on Unsplash's own API response.
 - **Unsplash rate limits.** The free Unsplash API tier is limited to 50 requests/hour (demo apps) — see [Unsplash API guidelines](https://unsplash.com/documentation) before using this in production.
-- **Static credential.** The API key lives in the workflow JSON rather than in n8n's credential manager (see security note above).
 
 ## Repository contents
 
