@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unsplash Image Agent</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="card">
+    <h1>Unsplash Image Agent</h1>
+    <p class="subtitle">Type a word, get 3 matching photos.</p>
+
+    <form id="search-form">
+      <input
+        type="text"
+        id="query-input"
+        placeholder="e.g. mountains, coffee, rain..."
+        autocomplete="off"
+        required
+      />
+      <button type="submit" id="search-button">Search</button>
+    </form>
+
+    <p id="status" class="status" role="status"></p>
+
+    <div id="results" class="results"></div>
+
+    <details id="settings">
+      <summary>Webhook settings</summary>
+      <label for="webhook-url">n8n webhook URL</label>
+      <div class="settings-row">
+        <input
+          type="url"
+          id="webhook-url"
+          placeholder="https://your-instance.app.n8n.cloud/webhook/your-webhook-id"
+        />
+        <button type="button" id="save-webhook">Save</button>
+      </div>
+      <p class="hint">
+        Stored only in this browser. Use your workflow's production webhook URL
+        (activate the workflow in n8n first) — the "webhook-test" URL only
+        works while the workflow editor is open.
+      </p>
+    </details>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

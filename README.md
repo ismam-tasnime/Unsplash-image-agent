@@ -78,24 +78,39 @@ GET https://rafha1082.app.n8n.cloud/webhook-test/b04b0235-03c8-4c17-b508-24ed3c5
 
 A screenshot of a live response is saved at `images/output image response save.png`.
 
+## Web app
+
+`app/` contains a small static front end for the workflow: type a word, hit Search, and it renders the 3 photos the webhook returns.
+
+- Plain HTML/CSS/JS, no build step or dependencies.
+- The webhook URL is configurable from the page itself (**Webhook settings**) and saved in the browser's `localStorage`, so you can point it at your own n8n instance without editing any code.
+
+To run it, just open `app/index.html` in a browser, or serve the folder with any static file server, e.g.:
+
+```
+npx serve app
+```
+
 ## Setup
 
 1. **Import the workflow.** In n8n, go to **Workflows → Import from File** and select `unsplash image agent.json`.
 2. **Add your Unsplash Access Key.** Register an application at [Unsplash Developers](https://unsplash.com/developers) to get an Access Key, then open the **HTTP Request** node and set the `Authorization` header value to `Client-ID <your-access-key>` (ideally stored via n8n credentials/environment variables rather than pasted directly into the node — see the security note below).
 3. **Activate the workflow.** Toggle it active so the production webhook URL is live (n8n also exposes a `/webhook-test/...` URL for use while the workflow editor is open, which is what's shown in the example above).
-4. **Call the webhook** with a `q` query parameter set to whatever you want to search for, e.g. `?q=mountains`, `?q=coffee`, `?q=cats`.
+4. **Call the webhook** with a `q` query parameter set to whatever you want to search for, e.g. `?q=mountains`, `?q=coffee`, `?q=cats` — or use the [web app](#web-app) instead of calling it directly.
 
 ## Limitations
 
 - **Fixed result count.** `per_page` is hard-coded to `3`; it isn't yet exposed as a query parameter on the webhook.
 - **No input validation.** A missing or empty `q` parameter is passed straight to Unsplash as-is, so error handling depends entirely on Unsplash's own API response.
 - **Unsplash rate limits.** The free Unsplash API tier is limited to 50 requests/hour (demo apps) — see [Unsplash API guidelines](https://unsplash.com/documentation) before using this in production.
+- **CORS.** For a browser (like the web app in `app/`) to call the webhook directly, the **Respond to Webhook** node needs an `Access-Control-Allow-Origin` response header — already included in `unsplash image agent.json`. If you rebuild the workflow from scratch, add that header yourself or the app's fetch requests will be blocked.
 
 ## Repository contents
 
 | Path | Description |
 |---|---|
 | `unsplash image agent.json` | The exportable n8n workflow definition (nodes, parameters, and connections). |
+| `app/` | Static web app front end (HTML/CSS/JS) for the workflow — type a word, get 3 photos. |
 | `files/webhook test url with query.txt` | Example webhook request URL, including the `q` query parameter. |
 | `files/output json response image agent.txt` | Example JSON response returned by the workflow. |
 | `images/unsplash image agent worflow screenshot.png` | Screenshot of the 4-node workflow in the n8n editor. |
